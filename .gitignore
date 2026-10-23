@@ -1,0 +1,21 @@
+# --- Python ---
+# Carpeta que Python crea sola al importar módulos (por ejemplo, protocolo.py)
+__pycache__/
+# Archivos compilados de Python
+*.pyc
+
+# --- Entornos virtuales ---
+# Por si alguno crea un entorno virtual en la carpeta del proyecto
+venv/
+.venv/
+
+# --- Editor (VS Code) ---
+# Configuración personal de cada integrante
+.vscode/
+
+# --- Sistema operativo ---
+# Miniaturas que Windows genera en carpetas con imágenes (docs/evidencias/)
+Thumbs.db
+desktop.ini
+# Archivo equivalente de macOS
+.DS_Store

@@ -1,13 +1,3 @@
-"""
-servidor_chat.py
-Servidor de difusión (broadcast) para el chat multiusuario en red LAN.
-
-Responsabilidades separadas en tres clases:
-  - SalaChat:          guarda la lista de clientes conectados y difunde mensajes.
-  - ManejadorCliente:  atiende a UN cliente durante toda su conexión (un hilo por cliente).
-  - ServidorChat:      abre el puerto, acepta conexiones y crea un hilo por cada cliente.
-"""
-
 import socket                          
 import threading                       
 import logging                         
@@ -22,6 +12,9 @@ from protocolo import (
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
+
+# --- CONTRATO DE DIFUSIÓN (Inversión de Dependencias) ---
+
 class InterfazDifusion(ABC):
     @abstractmethod
     def agregar_cliente(self, conexion: socket.socket) -> None:
@@ -35,20 +28,23 @@ class InterfazDifusion(ABC):
     def difundir(self, mensaje: str, remitente: socket.socket) -> None:
         """Envía el mensaje a todos los clientes excepto al remitente."""
 
-
 class SalaChat(InterfazDifusion):
+    """
+    Mantiene el registro dinámico de clientes conectados y difunde los mensajes.
+    """
 
     def __init__(self):
         self._clientes = []                 
         self._candado = threading.Lock()    
 
     def agregar_cliente(self, conexion: socket.socket) -> None:
-        # Se añade el cliente a la lista
         with self._candado:
             self._clientes.append(conexion)     
 
     def eliminar_cliente(self, conexion: socket.socket) -> None:
-        pass
+        with self._candado:
+            if conexion in self._clientes:
+                self._clientes.remove(conexion)
 
     def difundir(self, mensaje: str, remitente: socket.socket) -> None:
         pass
@@ -69,7 +65,6 @@ class ManejadorCliente:
         logging.info(f"Cliente conectado desde {self._ip_puerto()}")
         lector = LectorMensajes(self._conexion)
         registrado = False    
-
         try:
             alias = lector.leer()
             if alias is None:
@@ -139,7 +134,6 @@ class ServidorChat:
             logging.info("Servidor detenido por el usuario")
         finally:
             self._socket_servidor.close()
-
 
 if __name__ == "__main__":
     HOST = "0.0.0.0"    

@@ -285,4 +285,3 @@ En ambos programas, los bloques `finally` garantizan que los sockets se cierren 
 | [Responsabilidades](docs/01_responsabilidades.pdf) | Líder, rol y entregable de cada integrante |
 | [Acta](docs/02_acta.pdf) | Lo que realizó cada integrante |
 | [Bitácora del líder](docs/03_bitacora_lider.pdf) | Organización, imprevistos y estrategias de comunicación |
-| [Aportes individuales](docs/aportes/) | Documentación del servidor (Juan) y del cliente (Francisco) |
